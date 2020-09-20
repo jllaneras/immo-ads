@@ -1,0 +1,4 @@
+.venv
+.env
+immo_ads-*.json
+immo_ads-*.html
