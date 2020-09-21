@@ -25,18 +25,18 @@ SMTP_USERNAME = os.environ['SMTP_USERNAME']
 SMTP_PASSWORD = os.environ['SMTP_PASSWORD']
 SMTP_HOSTNAME = os.environ['SMTP_HOSTNAME']
 SMTP_PORT = os.environ['SMTP_PORT']
-
 EMAIL_FROM = os.environ['EMAIL_FROM']
-EMAIL_TO = os.environ['EMAIL_TO'].split(',')
 
 def main():
     if len(sys.argv) == 1:
         search_name = os.environ['SEARCH_NAME']
         email_recipients = os.getenv('EMAIL_TO')
+        if email_recipients:
+            email_recipients = email_recipients.split(',')
         search_parameters = os.environ['SEARCH_PARAMETERS']
     elif len(sys.argv) == 4:
         search_name = sys.argv[1]
-        email_recipients = sys.argv[2]
+        email_recipients = sys.argv[2].split(',')
         search_parameters = sys.argv[3]
     else:
         sys.exit(f'Usage: {sys.argv[0]} SEARCH_NAME EMAIL_RECIPIENTS SEARCH_PARAMETERS')
@@ -46,7 +46,7 @@ def main():
         with open(search_name_to_filename(search_name, 'html'), 'w') as new_ads_file:
             new_ads_file.write(html)
         if email_recipients:
-            send_email(EMAIL_TO, search_name, html)
+            send_email(email_recipients, search_name, html)
 
 
 def get_new_ads_html(search_parameters, search_name):
