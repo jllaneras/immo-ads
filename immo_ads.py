@@ -52,7 +52,7 @@ def get_new_ads_html(search_parameters, search_name):
     print(f'{len(new_ads)} new ads were found.')
 
     if len(new_ads) > 0:
-        with open('email_template.html', 'r') as email_template:
+        with open(join(dirname(__file__), 'email_template.html'), 'r') as email_template:
             template = Template(email_template.read())
         
         return template.render(search_name=search_name, new_ads=new_ads)
@@ -119,7 +119,7 @@ def save_ads_to_file(new_ads, previous_ads, search_name):
 def search_name_to_filename(search_name, file_extension='json'):
     filename = ''.join([c for c in search_name if c.isalpha() or c.isdigit() or c==' ']).rstrip()
     filename = filename.replace(' ', '_')
-    return f'immo_ads-{filename}.{file_extension}'
+    return join(dirname(__file__), f'immo_ads-{filename}.{file_extension}')
 
 
 def send_email(email_to, subject, body):
