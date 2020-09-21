@@ -31,15 +31,15 @@ EMAIL_TO = os.environ['EMAIL_TO'].split(',')
 
 def main():
     if len(sys.argv) == 1:
-        search_parameters = os.environ['SEARCH_PARAMETERS'] 
         search_name = os.environ['SEARCH_NAME']
         email_recipients = os.getenv('EMAIL_TO')
+        search_parameters = os.environ['SEARCH_PARAMETERS']
     elif len(sys.argv) == 4:
-        search_parameters = sys.argv[1]
-        search_name = sys.argv[2]
-        email_recipients = sys.argv[3]
+        search_name = sys.argv[1]
+        email_recipients = sys.argv[2]
+        search_parameters = sys.argv[3]
     else:
-        sys.exit(f'Usage: {sys.argv[0]} SEARCH_PARAMETERS SEARCH_NAME EMAIL_RECIPIENTS')
+        sys.exit(f'Usage: {sys.argv[0]} SEARCH_NAME EMAIL_RECIPIENTS SEARCH_PARAMETERS')
     
     html = get_new_ads_html(search_parameters, search_name)
     if html:
