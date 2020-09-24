@@ -20,14 +20,10 @@ p {
  
 article img {
     margin: 0 15px 0 0;
+    border-radius: 3px;
 }
 
-article.odd {
-    background-color: #eee;
-}
- 
 article {
-    padding-bottom: 15px;
     overflow: auto;
 }
  
@@ -35,12 +31,20 @@ img.house-placeholder {
     width: 300px;
     height: 225px;
 }
+
+hr {
+    height: 4px;
+    border-width: 0;
+    color: gray;
+    background-color: gray;
+    margin: 15px 0;
+}
 </style>
 </head>
 <body>
 {% for ad in new_ads %}
     {% if not ad.flags.main == "under_option" %}
-    <article class="{{ loop.cycle('odd', 'even') }}">
+    <article>
         <a href="{{ "https://www.immoweb.be/en/classified/" ~ ad.id }}">
             {% if ad.media.pictures[0].mediumUrl is not none %}
             <img src="{{ ad.media.pictures[0].mediumUrl }}" />
@@ -57,6 +61,7 @@ img.house-placeholder {
         {{ ad.property.location.locality }} ({{ ad.property.location.district }})</h3>
         <p>Land surface: {{ ad.property.landSurface }} m2, habitable surface: {{ ad.property.netHabitableSurface }} m2, number of bedrooms: {{ ad.property.bedroomCount }}</p>
     </article>
+    <hr>
     {% endif %}
 {% endfor %}
 </body>
