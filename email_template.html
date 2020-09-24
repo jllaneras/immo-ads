@@ -5,13 +5,17 @@
 * {margin: 0; padding: 0;}
  
 h2 {
-    font: bold 35px/1.5 Helvetica, Verdana, sans-serif;
+    font: bold 35px Helvetica, Verdana, sans-serif;
     margin-block-end: 0.5em;
     margin-block-start: 0.5em;
 }
 
 h3 {
-    font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
+    font: bold 20px Helvetica, Verdana, sans-serif;
+}
+
+p {
+    font: 16px Helvetica, Verdana, sans-serif;
 }
  
 article img {
@@ -44,7 +48,13 @@ img.house-placeholder {
             <img src="https://assets.immoweb.be/32/images/artworks/placeholder_card.svg" class="house-placeholder" />
             {% endif %}
         </a>
-        <h3>{% if ad.transaction.sale.price is not none %}{{ "{:,}".format(ad.transaction.sale.price) }} EUR - {% endif%}{{ ad.property.location.locality }} ({{ ad.property.location.district }})</h3>
+        <h3>
+        {% if ad.transaction.sale.price is not none %}
+            {{ "{:,}".format(ad.transaction.sale.price) }} EUR - 
+        {% elif ad.transaction.sale.lifeAnnuity is not none %}
+            {{ "{:,}".format(ad.transaction.sale.lifeAnnuity.lumpSum) }} EUR + {{ "{:,}".format(ad.transaction.sale.lifeAnnuity.monthlyAmount) }} EUR/month -
+        {% endif%}
+        {{ ad.property.location.locality }} ({{ ad.property.location.district }})</h3>
         <p>Land surface: {{ ad.property.landSurface }} m2, habitable surface: {{ ad.property.netHabitableSurface }} m2, number of bedrooms: {{ ad.property.bedroomCount }}</p>
     </article>
     {% endif %}
