@@ -44,7 +44,7 @@ img.house-placeholder {
             <img src="https://assets.immoweb.be/32/images/artworks/placeholder_card.svg" class="house-placeholder" />
             {% endif %}
         </a>
-        <h3>{{ ad.transaction.sale.price }} EUR - {{ ad.property.location.locality }} ({{ ad.property.location.district }})</h3>
+        <h3>{% if ad.transaction.sale.price is not none %}{{ "{:,}".format(ad.transaction.sale.price) }} EUR - {% endif%}{{ ad.property.location.locality }} ({{ ad.property.location.district }})</h3>
         <p>Land surface: {{ ad.property.landSurface }} m2, habitable surface: {{ ad.property.netHabitableSurface }} m2, number of bedrooms: {{ ad.property.bedroomCount }}</p>
     </article>
     {% endif %}
