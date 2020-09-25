@@ -17,7 +17,6 @@ from jinja2 import Template
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-SEARCH_URL = os.environ['SEARCH_URL']
 # TODO Implement paginated requests to increase max results over 30
 MAX_RESULTS = 30
 
@@ -33,15 +32,15 @@ def main():
         email_recipients = os.getenv('EMAIL_TO')
         if email_recipients:
             email_recipients = email_recipients.split(',')
-        search_parameters = os.environ['SEARCH_PARAMETERS']
+        search_url = os.environ['SEARCH_URL']
     elif len(sys.argv) == 4:
         search_name = sys.argv[1]
         email_recipients = sys.argv[2].split(',')
-        search_parameters = sys.argv[3]
+        search_url = sys.argv[3]
     else:
-        sys.exit(f'Usage: {sys.argv[0]} SEARCH_NAME EMAIL_RECIPIENTS SEARCH_PARAMETERS')
+        sys.exit(f'Usage: {sys.argv[0]} SEARCH_NAME EMAIL_RECIPIENTS SEARCH_URL')
     
-    html = get_new_ads_html(search_parameters, search_name)
+    html = get_new_ads_html(search_url, search_name)
     if html:
         with open(search_name_to_filename(search_name, 'html'), 'w') as new_ads_file:
             new_ads_file.write(html)
@@ -49,8 +48,8 @@ def main():
             send_email(email_recipients, search_name, html)
 
 
-def get_new_ads_html(search_parameters, search_name):
-    new_ads = get_new_ads(search_parameters, search_name)
+def get_new_ads_html(search_url, search_name):
+    new_ads = get_new_ads(search_url, search_name)
     print(f'{len(new_ads)} new ads were found.')
 
     if len(new_ads) > 0:
@@ -60,8 +59,8 @@ def get_new_ads_html(search_parameters, search_name):
         return template.render(search_name=search_name, new_ads=new_ads)
 
 
-def get_new_ads(search_parameters, search_name):
-    latest_ads = get_latest_ads(search_parameters, search_name)
+def get_new_ads(search_url, search_name):
+    latest_ads = get_latest_ads(search_url, search_name)
     previous_ads = get_previous_ads(search_name)
 
     if len(previous_ads) == 0:
@@ -80,8 +79,8 @@ def get_new_ads(search_parameters, search_name):
     return new_ads
 
 
-def get_latest_ads(search_parameters, search_name):
-    response = requests.get(SEARCH_URL + search_parameters)
+def get_latest_ads(search_url, search_name):
+    response = requests.get(search_url)
 
     if response.status_code != requests.codes.ok:
         sys.exit(f'{response.status_code} HTTP error.')
